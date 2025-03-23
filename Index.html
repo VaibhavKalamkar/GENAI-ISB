@@ -1,73 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Pack My Bag - Front-End Only</title>
-  <style>
-    /* Minimal inline CSS */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8fff4;
-      margin: 0;
-      padding: 0;
-    }
-    header, footer {
-      background-color: #c4f1c4;
-      padding: 1rem;
-      text-align: center;
-    }
-    h1, h2 {
-      margin-bottom: 0.5rem;
-    }
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-    }
-    input, select {
-      width: 100%;
-      padding: 0.5rem;
-    }
-    button {
-      margin-top: 1rem;
-      padding: 0.75rem 1.5rem;
-      background-color: #5cb85c;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    .packing-list {
-      background-color: #fff;
-      padding: 1rem;
-      margin-top: 2rem;
-      border-radius: 8px;
-    }
-    .item-category {
-      margin-bottom: 1rem;
-    }
-  </style>
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Optional: Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" 
+    rel="stylesheet">
 </head>
 <body>
+
+  <!-- HEADER -->
   <header>
     <h1>Pack My Bag</h1>
   </header>
 
   <div class="container">
-    <!-- PAGE 1: Start Packing -->
-    <section id="page1">
+    <!-- PAGE 1: Landing Section -->
+    <section id="page1" class="page active">
       <h2>Never Forget What to Pack Again</h2>
       <p>AI-powered packing lists customized for your trip.</p>
-      <button onclick="showPage('page2')">Start Packing</button>
+      <button class="cta-btn" onclick="showPage('page2')">Start Packing</button>
     </section>
 
     <!-- PAGE 2: Trip Details Form -->
-    <section id="page2" style="display: none;">
+    <section id="page2" class="page">
       <h2>Enter Trip Details</h2>
       <label for="destination">Destination(s):</label>
       <input type="text" id="destination" placeholder="e.g. Paris, Coorg" />
@@ -127,43 +90,51 @@
       <label for="specialNeeds">Special Needs:</label>
       <input type="text" id="specialNeeds" placeholder="Meds, baby stuff, camera gear..." />
 
-      <button onclick="generatePackingList()">Generate Packing List</button>
+      <button class="cta-btn" onclick="generatePackingList()">Generate Packing List</button>
     </section>
 
     <!-- PAGE 3: Packing List Display -->
-    <section id="page3" style="display: none;">
+    <section id="page3" class="page">
       <h2>Packing List</h2>
       <div id="packingListOutput" class="packing-list">
-        <!-- AI-generated content will appear here -->
+        <!-- Mistral AI response will appear here -->
       </div>
     </section>
   </div>
 
+  <!-- FOOTER -->
   <footer>
     <p>&copy; 2023 Pack My Bag</p>
   </footer>
 
+  <!-- JAVASCRIPT -->
   <script>
-    // ----------------------------------------
-    // 0. Mistral AI Key & Basic Config
-    // ----------------------------------------
-    // WARNING: This is not secure for production use.
-    // Anyone can view-source and see your API key.
-    const MISTRAL_API_KEY = "Qo3UkuQbLN35xKltzOVEQ0nLfgBG7mvq";
+    /********************************************
+     *    1) Insert Your Mistral API Key Here   *
+     ********************************************/
+    // Replace "YOUR_MISTRAL_API_KEY_HERE" with your actual Mistral key.
+    // WARNING: This is visible in page source.
+    const MISTRAL_API_KEY = "Qo3UkuQbLN35xKltzOVEQ0nLfgBG7mvq"; 
 
-    // ----------------------------------------
-    // 1. Simple Page Navigation
-    // ----------------------------------------
+    /********************************************
+     * 2) Simple Page Navigation (show/hide)    *
+     ********************************************/
     function showPage(pageId) {
-      document.getElementById('page1').style.display = 'none';
-      document.getElementById('page2').style.display = 'none';
-      document.getElementById('page3').style.display = 'none';
+      document.querySelectorAll('.page').forEach(sec => {
+        sec.style.display = 'none';
+      });
       document.getElementById(pageId).style.display = 'block';
     }
 
-    // ----------------------------------------
-    // 2. Collect Form Data & Call Mistral
-    // ----------------------------------------
+    // By default, show only page1
+    window.onload = () => {
+      document.querySelectorAll('.page').forEach(sec => sec.style.display = 'none');
+      document.getElementById('page1').style.display = 'block';
+    };
+
+    /********************************************
+     * 3) Gather Inputs & Call Mistral API      *
+     ********************************************/
     async function generatePackingList() {
       // Gather the 11 fields
       const data = {
@@ -180,19 +151,21 @@
         specialNeeds: document.getElementById('specialNeeds').value
       };
 
-      // Build a prompt (or request body) for Mistral
+      // Build a prompt for Mistral (example)
       const prompt = `
         You are a travel packing assistant.
         The user is going to ${data.destination} from ${data.travelDates} for ${data.duration} days.
         Travel type: ${data.travelType}. Activities: ${data.activities}.
         Accommodation: ${data.accommodationType}, Luggage: ${data.luggageType}.
-        Gender: ${data.gender}, With kids: ${data.kids}, First-time: ${data.firstTime}, Special needs: ${data.specialNeeds}.
-        Please provide a categorized packing list into Clothes, Toiletries, Gadgets, Travel Docs, Meds, Optional Extras.
+        Gender: ${data.gender}, With kids: ${data.kids}, 
+        First-time traveler: ${data.firstTime}, Special needs: ${data.specialNeeds}.
+        Please provide a categorized packing list into 
+        Clothes, Toiletries, Gadgets, Travel Docs, Meds, Optional Extras.
       `;
 
       try {
-        // Make a direct POST request to Mistral
-        // *Placeholder URL & request format—adjust as per Mistral docs*
+        // 4) Call Mistral API directly from front-end
+        //    Replace the URL if Mistral’s endpoint is different
         const response = await fetch("https://api.mistralai.com/v1/generate", {
           method: "POST",
           headers: {
@@ -200,8 +173,9 @@
             "Authorization": `Bearer ${MISTRAL_API_KEY}`
           },
           body: JSON.stringify({
-            prompt: prompt,
-            // Possibly other parameters like temperature, max_tokens, etc.
+            // If Mistral expects a different field name, adjust here
+            prompt: prompt
+            // e.g. temperature: 0.7, max_tokens: 500, etc.
           })
         });
 
@@ -209,19 +183,13 @@
           throw new Error(`Mistral API error: ${response.statusText}`);
         }
 
-        // Example: Mistral might return { text: "...packing list..." }
-        // or a more complex JSON object. Adjust parsing accordingly.
+        // 5) Parse the result. Mistral’s real response may differ.
         const result = await response.json();
-        
-        // Let's assume the final text is in result.text
         const packingText = result.text || JSON.stringify(result);
 
-        // Show the "Packing List" page
+        // 6) Switch to "Packing List" page & display
         showPage('page3');
-        
-        // Display the result in #packingListOutput
-        const outputEl = document.getElementById('packingListOutput');
-        outputEl.innerHTML = `<pre>${packingText}</pre>`;
+        document.getElementById('packingListOutput').innerHTML = `<pre>${packingText}</pre>`;
 
       } catch (err) {
         alert("Error: " + err.message);
