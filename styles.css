@@ -1,0 +1,63 @@
+/* styles.css */
+/* Basic styling and layout. Feel free to adjust colors, spacing, fonts. */
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8fff4;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* HEADER & FOOTER */
+header, footer {
+  background-color: #c4f1c4;
+  padding: 1rem;
+  text-align: center;
+}
+header h1, footer p {
+  margin: 0;
+}
+
+/* CONTAINER & PAGE SECTIONS */
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+.page {
+  display: none; /* hidden by default, shown via JS */
+}
+.page.active {
+  display: block;
+}
+
+/* FORM ELEMENTS */
+label {
+  display: block;
+  margin-top: 1rem;
+}
+input, select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+/* BUTTONS */
+.cta-btn {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #5cb85c;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* PACKING LIST OUTPUT */
+.packing-list {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
